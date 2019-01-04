@@ -34,3 +34,25 @@ void ChessPiece::setSymbol(){
 PieceType ChessPiece::getType(){
 	return type;
 }
+
+void ChessPiece::setLocation(int row, int col){
+	this->row = row;
+	this->col = col;
+}
+
+virtual bool noInterveningPieces(ChessBoard& chessboard, std::pair<int,int>& moveUnitVector, int moveMagnitude){
+	int currentRow = this->row;
+	int currentCol = this->col;
+
+	for(int i=0; i<moveMagnitude; ++i){
+		currentRow += moveUnitVector->first;
+		currentCol += moveUnitVector->second;
+
+		if(chessboard.squareIsOccupied(currentRow, currentCol)){
+			if(chessboard.getPieceColor(currentRow, currentCol) == this->color) return false;
+			else if (i != moveMagnitude - 1) return false;
+		}
+	}
+
+	return true;
+}

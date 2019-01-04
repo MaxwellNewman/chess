@@ -16,10 +16,15 @@ class ChessBoard{
 public:
 	ChessBoard(Color playerColor);
 	void printBoard();
+	Color getPieceColor(int row, int col);
+	bool squareIsOccupied(int row, int col);
+	PieceType getPieceType(int row, int col);
+	Color getLowerColor();
+	bool lastMoved(int row, int col);
 
 private:
 	std::vector<std::vector<ChessSquare> > board;
-	Color playerColor;
+	Color lowerColor;
 
 	void initializeBoard();
 	void createBoard();
@@ -30,6 +35,8 @@ private:
 	void printRow(int row);
 	Color reverseColor(Color currentColor);
 	ChessPiece* pieceFactory(Color pieceColor, PieceType pieceType);
+	bool coordinatesOffBoard(int row, int col);
+	ChessPiece* lastMovedPiece;
 };
 
 #endif

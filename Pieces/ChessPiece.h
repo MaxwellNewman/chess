@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 
+#include "../ChessBoard.h"
 #include "../Enums.h"
 
 class ChessPiece{
@@ -15,14 +16,19 @@ public:
 	char getSymbol();
 	Color getColor();
 	PieceType getType();
+	void setLocation(int row, int col);
+	virtual bool validateMove(ChessBoard& board, int moveRow, int moveCol) = 0;
 
-private:
+protected:
 	Color color;
 	PieceType type;
 	bool hasMoved;
 	char symbol;
+	int row;
+	int col;
 
 	void setSymbol();
+	virtual bool noInterveningPieces(ChessBoard& chessboard, std::pair<int,int>& moveUnitVector, int moveMagnitude);
 };
 
 #endif

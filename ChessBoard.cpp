@@ -1,7 +1,7 @@
 #include "ChessBoard.h"
 
-ChessBoard::ChessBoard(Color playerColor){
-	this->playerColor = playerColor;
+ChessBoard::ChessBoard(Color lowerColor){
+	this->lowerColor = lowerColor;
 	createBoard();
 	initializeBoard();
 	colorBoard();
@@ -48,6 +48,7 @@ ChessPiece* ChessBoard::placePiece(int row, int col){
 	Color pieceColor = determinePieceColor(row, col);
 	PieceType pieceType = determinePieceType(row, col);
 	ChessPiece* pieceToPlace = pieceFactory(pieceColor, pieceType);
+	pieceToPlace->setLocation(row, col);
 
 	return pieceToPlace;
 }
@@ -67,9 +68,9 @@ ChessPiece* ChessBoard::pieceFactory(Color pieceColor, PieceType pieceType){
 
 Color ChessBoard::determinePieceColor(int row, int col){
 	Color pieceColor;
-	(row == 0 || row == 1) ? pieceColor = reverseColor(playerColor) : pieceColor = playerColor;
+	(row == 0 || row == 1) ? pieceColor = reverseColor(lowerColor) : pieceColor = lowerColor;
 
-	return playerColor;
+	return lowerColor;
 }
 
 PieceType ChessBoard::determinePieceType(int row, int col){
@@ -80,7 +81,7 @@ PieceType ChessBoard::determinePieceType(int row, int col){
 	else if(col == 1 || col == BOARD_DIMENSION -2) pieceType = KNIGHT;
 	else if(col == 2 || col == BOARD_DIMENSION - 3) pieceType = BISHOP;
 	else{
-		if(playerColor == WHITE){
+		if(lowerColor == WHITE){
 			if(col == 3) pieceType = QUEEN;
 			else pieceType = KING;
 		}
@@ -116,4 +117,39 @@ Color ChessBoard::reverseColor(Color currentColor){
 	else if(currentColor == BLACK) return WHITE;
 	else if(currentColor == WHITE_SQUARE) return BLACK_SQUARE;
 	else return WHITE_SQUARE;
+}
+
+Color ChessBoard::getPieceColor(int row, int col){
+	if(coordinatesOffBoard(row,col)) return -1;
+	if(!squareIsOccupied(row,col)) return -1;
+
+	return board[row][col].piece->getColor();
+}
+
+bool ChessBoard::squareIsOccupied(int row, int col){
+	if(coordinatesOffBoard(row,col)) return false;
+
+	return board[row][col].isOccupied();
+}
+
+bool ChessBoard::coordinatesOffBoard(int row, int col){
+	bool rowOffBoard = row < 0 || row >= BOARD_DIMENSION;
+	bool colOffBoard = col < 0 || col >= BOARD_DIMENSION;
+
+	return rowOffBoard || colOffBoard;
+}
+
+PieceType ChessBoard::getPieceType(int row, int col){
+	if(coordinatesOffBoard(row,col)) return -1;
+
+	return board[row][col].piece->getType();
+}
+
+Color ChessBoard::getLowerColor(){
+	return this->lowerColor;
+}
+
+bool ChessBoard::lastMoved(int row, int col){
+	ChessPiece* pieceOnSquare = board[row][col].piece;
+	return pieceOnSquare == lastMovedPiece;
 }

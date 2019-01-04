@@ -2,6 +2,7 @@
 #define CHESS_SQUARE_H
 
 #include <string>
+#include <stdlib.h>
 
 #include "Pieces/ChessPiece.h"
 #include "Enums.h"
@@ -15,7 +16,7 @@ public:
 	void setColor(Color color);
 	void setPiece(ChessPiece* piece);
 
-private:
+protected:
 	const std::string name;
 	int row;
 	int col;
@@ -23,6 +24,7 @@ private:
 	ChessPiece* piece;
 	Color colorName;
 	Color outputColor;
+	bool hasMoved;
 
 	char getPieceSymbol();
 };
