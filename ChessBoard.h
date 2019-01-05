@@ -11,6 +11,7 @@
 #include "Pieces/Rook.h"
 #include "Pieces/Queen.h"
 #include "Pieces/King.h"
+#include "ChessMove.h"
 
 class ChessBoard{
 public:
@@ -21,22 +22,24 @@ public:
 	PieceType getPieceType(int row, int col);
 	Color getLowerColor();
 	bool lastMoved(int row, int col);
+	bool pieceHasMoved(int row, int col);
 
 private:
 	std::vector<std::vector<ChessSquare> > board;
 	Color lowerColor;
+	ChessPiece* lastMovedPiece;
 
-	void initializeBoard();
-	void createBoard();
+	Color reverseColor(Color currentColor);
+	ChessPiece* pieceFactory(Color pieceColor, PieceType pieceType);
 	ChessPiece* placePiece(int i, int j);
 	PieceType determinePieceType(int row, int col);
 	Color determinePieceColor(int row, int col);
+	void initializeBoard();
+	void createBoard();
 	void colorBoard();
 	void printRow(int row);
-	Color reverseColor(Color currentColor);
-	ChessPiece* pieceFactory(Color pieceColor, PieceType pieceType);
 	bool coordinatesOffBoard(int row, int col);
-	ChessPiece* lastMovedPiece;
+	bool checkForCheckmate();
 };
 
 #endif

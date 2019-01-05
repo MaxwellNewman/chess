@@ -5,6 +5,7 @@ ChessPiece::ChessPiece(){};
 ChessPiece::ChessPiece(Color pieceColor, PieceType type){
 	this->color = pieceColor;
 	this->type = type;
+	this->hasMoved = false;
 	setSymbol();
 }
 

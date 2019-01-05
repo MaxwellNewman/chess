@@ -8,8 +8,13 @@ public:
 	King();
 	King(Color pieceColor);
 
-private:
+	bool validateMove(ChessBoard& board, int moveRow, int moveCol);
 
+private:
+	bool moveVectorPermitted(std::pair<int,int> positionChange);
+	bool noInterveningPieces(int moveRow, int moveCol);
+	bool castlingCoordinatesPermitted(ChessBoard& chessboard, int moveRow, int moveCol);
+	bool castlingPiecesUnmoved(ChessBoard& chessboard, int moveRow, int moveCol);
 };
 
 #endif

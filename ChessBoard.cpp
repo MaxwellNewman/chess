@@ -153,3 +153,8 @@ bool ChessBoard::lastMoved(int row, int col){
 	ChessPiece* pieceOnSquare = board[row][col].piece;
 	return pieceOnSquare == lastMovedPiece;
 }
+
+bool ChessBoard::pieceHasMoved(int row, int col){
+	ChessPiece* pieceOnSquare = board[row][col].piece;
+	return pieceOnSquare->getHasMoved();
+}

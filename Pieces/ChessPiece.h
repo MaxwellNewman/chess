@@ -18,6 +18,7 @@ public:
 	PieceType getType();
 	void setLocation(int row, int col);
 	virtual bool validateMove(ChessBoard& board, int moveRow, int moveCol) = 0;
+	virtual bool isInDanger();
 
 protected:
 	Color color;
