@@ -6,8 +6,8 @@ class ChessMove{
 public:
 	ChessMove(std::pair<int,int> init, std::pair<int,int> dest);
 
-	std::pair<int,int> initialPosition;
-	std::pair<int,int> destinationPosition;
+	std::pair<int,int> attackerPos;
+	std::pair<int,int> defenderPos;
 private:
 
 }

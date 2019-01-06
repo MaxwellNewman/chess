@@ -5,17 +5,16 @@
 
 class ChessGame{
 public:
+	void playGame();
 
 private:
 	ChessBoard chessboard;
+	ChessPlayer* currPlayer;
 	ChessPlayer* whitePlayer;
 	ChessPlayer* blackPlayer;
-	std::vector<ChessPiece*> pieces;
-	std::vector<ChessPiece*> blackPieces;
-	std::vector<ChessPiece*> whitePieces;
 
-	bool checkForCheckmate();
-
+	ChessMove& getPlayerMove();
+	void swapPlayer();
 }
 
 #endif

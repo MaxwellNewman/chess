@@ -57,3 +57,44 @@ virtual bool noInterveningPieces(ChessBoard& chessboard, std::pair<int,int>& mov
 
 	return true;
 }
+
+virtual bool isInDanger(ChessBoard& chessboard){
+	std::vector<std::pair<int,int> > directionVectors = chessboard.getDirectionVectors();
+
+	for(int i=0; i<directionVectors.size(); ++i){
+		if(isInDangerFromDirection(chessboard, directionVectors[i])) return true;
+	}
+
+	if(chessboard.knightsCanAttack(this->getLocation(), this->color)) return true;
+
+	return false;
+}
+
+bool isInDangerFromDirection(ChessBoard& chessboard, std::pair<int,int>& directionVector){
+	int currRow = this->row + directionVector.first;
+	int currCol = this->col + directionVector.second;
+
+	while(!chessboard.coordinatesOffBoard(currRow, currCol)){
+		if(squareIsOccupied(currRow, currCol)){
+			if(chessboard.getPieceColor(currRow, currCol) == this->color) return false;
+
+			std::pair<int,int> attackerPos = std::make_pair(currRow, currCol);
+			std::pair<int,int> defenderPos = std::make_pair(this->row, this->col);
+
+			return chessboard.pieceCanAttack(attackerPos, defenderPos);
+		}
+
+		currRow += directionVector.first;
+		currCol += directionVector.second;
+	}
+
+	return false;
+}
+
+std::pair<int,int> ChessPiece::getLocation(){
+	return std::make_pair(this->row, this->col);
+}
+
+bool ChessPiece::isAlive(){
+	return this->alive;
+}

@@ -17,6 +17,8 @@ public:
 	Color getColor();
 	PieceType getType();
 	void setLocation(int row, int col);
+	std::pair<int,int> getLocation();
+	bool isAlive();
 	virtual bool validateMove(ChessBoard& board, int moveRow, int moveCol) = 0;
 	virtual bool isInDanger();
 
@@ -27,6 +29,7 @@ protected:
 	char symbol;
 	int row;
 	int col;
+	bool alive;
 
 	void setSymbol();
 	virtual bool noInterveningPieces(ChessBoard& chessboard, std::pair<int,int>& moveUnitVector, int moveMagnitude);

@@ -4,6 +4,7 @@
 enum Color{
 	WHITE,
 	BLACK,
+	INVALID_COLOR,
 	WHITE_SQUARE = 0xDB,
 	BLACK_SQUARE = 0xFF,
 };
@@ -15,6 +16,7 @@ enum PieceType{
 	ROOK,
 	QUEEN,
 	KING,
+	INVALID_PIECE,
 };
 
 enum Sizes{

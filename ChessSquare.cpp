@@ -39,3 +39,12 @@ char ChessSquare::getPieceSymbol(){
 	if(piece == NULL) return char(outputColor);
 	return piece->getSymbol();
 }
+
+ChessPiece* ChessSquare::replacePiece(ChessPiece* replacement){
+	ChessPiece* previousPiece = this->piece;
+
+	this->piece = replacement;
+	this->occupied = (bool)replacement;
+
+	return previousPiece;
+}

@@ -15,16 +15,17 @@ public:
 	std::string getOutputLine(int row);
 	void setColor(Color color);
 	void setPiece(ChessPiece* piece);
+	ChessPiece* ChessSquare::replacePiece(ChessPiece* replacement);
+
+	ChessPiece* piece;
 
 protected:
 	const std::string name;
 	int row;
 	int col;
 	bool occupied;
-	ChessPiece* piece;
 	Color colorName;
 	Color outputColor;
-	bool hasMoved;
 
 	char getPieceSymbol();
 };
