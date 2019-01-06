@@ -1,6 +1,12 @@
 
 #include "HumanPlayer.h"
 
+const char HumanPlayer::charsToRemove[] = ",:-.; ";
+
+HumanPlayer::HumanPlayer(){
+
+}
+
 ChessMove HumanPlayer::selectMove(){
 	std::string initialPositionMessage = "Select the piece you would like to move by its starting coordinates.  Use the format RC (Row Letter, Column Number)";
 	std::string destinationPositionMessage = "Select the destination of your piece.  Use the format RC (Row letter, Column number).";
@@ -11,7 +17,7 @@ ChessMove HumanPlayer::selectMove(){
 	return ChessMove(initialPosition, destinationPosition);
 }
 
-std::pair<int,int> getCoordinates(std::string& messagePrompt){
+std::pair<int,int> HumanPlayer::getCoordinates(std::string& messagePrompt){
 	bool positionValid = false;
 	std::pair<int,int> position;
 
@@ -20,11 +26,11 @@ std::pair<int,int> getCoordinates(std::string& messagePrompt){
 		std::string positionString;
 		std::cin >> positionString;
 
-		removeExtraCharacters(positionString);
+		this->removeExtraCharacters(positionString);
 		positionValid = isValidPosition(positionString);
 
 		if(positionValid){
-			position = extractPosition(initialPositionString);
+			position = extractPosition(positionString);
 		}
 		else{
 			std::cout << "The cell you entered was invalid.  Please try again.";
@@ -34,10 +40,10 @@ std::pair<int,int> getCoordinates(std::string& messagePrompt){
 	return position;
 }
 
-void HumanPlayer::removeExtraCharacters(std::string& initialPosition){
+void HumanPlayer::removeExtraCharacters(std::string& positionString){
 	for(int i=0; i<6; ++i){
 		char currChar = charsToRemove[i];
-		removeCharFromString(initialPosition, currChar);
+		removeCharFromString(positionString, currChar);
 	}
 }
 

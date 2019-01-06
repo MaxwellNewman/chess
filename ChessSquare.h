@@ -4,8 +4,11 @@
 #include <string>
 #include <stdlib.h>
 
-#include "Pieces/ChessPiece.h"
+#include "ChessBoard.h"
+#include "ChessPiece.h"
 #include "Enums.h"
+
+class ChessPiece;
 
 class ChessSquare{
 public:
@@ -15,7 +18,7 @@ public:
 	std::string getOutputLine(int row);
 	void setColor(Color color);
 	void setPiece(ChessPiece* piece);
-	ChessPiece* ChessSquare::replacePiece(ChessPiece* replacement);
+	ChessPiece* replacePiece(ChessPiece* replacement);
 
 	ChessPiece* piece;
 

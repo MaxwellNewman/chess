@@ -5,15 +5,18 @@
 #include <unordered_map>
 
 #include "Enums.h"
+#include "ChessPiece.h"
 #include "ChessSquare.h"
-#include "Pieces/Pawn.h"
-#include "Pieces/Knight.h"
-#include "Pieces/Bishop.h"
-#include "Pieces/Rook.h"
-#include "Pieces/Queen.h"
-#include "Pieces/King.h"
-#include "Pieces/ChessPiece.h"
+#include "Pawn.h"
+#include "Knight.h"
+#include "Bishop.h"
+#include "Rook.h"
+#include "Queen.h"
+#include "King.h"
 #include "ChessMove.h"
+
+class ChessPiece;
+class ChessSquare;
 
 class ChessBoard{
 public:
@@ -25,8 +28,12 @@ public:
 	Color getLowerColor();
 	bool lastMoved(int row, int col);
 	bool pieceHasMoved(int row, int col);
-	std::vector<std::pair<int,int> >& getDirectionVectors();
+	std::vector<std::pair<int,int> > getDirectionVectors();
 	bool makeMove(ChessMove move);
+	bool pieceCanAttack(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos);
+	bool knightsCanAttack(std::pair<int,int>& defenderPos, Color defenderColor);
+	bool makeMove(ChessMove& move);
+	bool coordinatesOffBoard(int row, int col);
 
 private:
 	std::vector<std::vector<ChessSquare> > board;
@@ -42,7 +49,6 @@ private:
 	ChessPiece* blackKing;
 
 	static const std::vector<std::pair<int,int> > directionVectors;
-	
 
 	Color reverseColor(Color currentColor);
 	ChessPiece* pieceFactory(Color pieceColor, PieceType pieceType);
@@ -53,8 +59,8 @@ private:
 	void createBoard();
 	void colorBoard();
 	void printRow(int row);
-	bool coordinatesOffBoard(int row, int col);
-	bool checkForCheckmate();
+	bool checkForCheckmate(ChessPiece* kingToCheck);
+	bool takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos);
 };
 
 #endif
