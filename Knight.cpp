@@ -20,9 +20,17 @@ bool Knight::locationIsValid(ChessBoard& board, std::pair<int,int> positionChang
 	int absRowChange = abs(positionChange.first);
 	int absColChange = abs(positionChange.second);
 
+	std::cout << "abs row: " << absRowChange << "	abs col: " << absColChange << std::endl;
+
 	bool locationValid = (absRowChange == 2 || absColChange == 2);
+	std::cout << std::boolalpha << "locationValid: " << locationValid << std::endl;
+
 	locationValid &= (absRowChange == 1 || absColChange == 1);
+	std::cout << std::boolalpha << "locationValid: " << locationValid << std::endl;
+
 	locationValid &= (absRowChange != absColChange);
+	std::cout << std::boolalpha << "locationValid: " << locationValid << std::endl;
+
 
 	return locationValid;
 }

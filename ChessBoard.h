@@ -29,11 +29,11 @@ public:
 	bool lastMoved(int row, int col);
 	bool pieceHasMoved(int row, int col);
 	std::vector<std::pair<int,int> > getDirectionVectors();
-	bool makeMove(ChessMove move);
+	bool makeMove(ChessMove& move);
 	bool pieceCanAttack(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos);
 	bool knightsCanAttack(std::pair<int,int>& defenderPos, Color defenderColor);
-	bool makeMove(ChessMove& move);
 	bool coordinatesOffBoard(int row, int col);
+	bool castleRook(ChessMove& move);
 
 private:
 	std::vector<std::vector<ChessSquare> > board;
@@ -61,6 +61,10 @@ private:
 	void printRow(int row);
 	bool checkForCheckmate(ChessPiece* kingToCheck);
 	bool takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos);
+	std::string currentAlgebraicRow(int row);
+	char currentAlgebraicColumn(int col);
+	std::string algebraicColumns();
+	void storePiecePointer(ChessPiece* piece);
 };
 
 #endif

@@ -18,6 +18,7 @@ private:
 	bool castlingCoordinatesPermitted(ChessBoard& chessboard, int moveRow, int moveCol);
 	bool castlingPiecesUnmoved(ChessBoard& chessboard, int moveRow, int moveCol);
 	bool castlingPossible(ChessBoard& chessboard, int moveRow, int moveCol);
+	void orderRookToCastle(ChessBoard& chessboard, int moveCol);
 };
 
 #endif

@@ -11,11 +11,42 @@ King::King(Color pieceColor) : ChessPiece(pieceColor, KING){
 bool King::validateMove(ChessBoard& chessboard, int moveRow, int moveCol){
 	std::pair<int,int> positionChange = std::make_pair(moveRow - this->row, moveCol - this->col);
 
-	if(castlingPossible(chessboard, moveRow, moveCol)) return true;
+	if(castlingPossible(chessboard, moveRow, moveCol) && noInterveningPieces(chessboard, moveRow, moveCol)){
+		orderRookToCastle(chessboard, moveCol);
+		return true;
+	}
 	if(!moveVectorPermitted(positionChange)) return false;
 	if(noInterveningPieces(chessboard, moveRow, moveCol)) return false;
 
 	return true;
+}
+
+void King::orderRookToCastle(ChessBoard& chessboard, int moveCol){
+	int rookInitRow = this->row;
+	int rookInitCol = 0;
+
+	int rookDestRow = this->row;
+	int rookDestCol = moveCol;
+
+	std::cout << " pre rook dest col: " << rookDestCol << std::endl;
+
+	if(moveCol < this->col) {
+		++rookDestCol;
+		rookInitCol = 0;
+	}
+	else{
+		--rookDestCol;
+		rookInitCol = BOARD_DIMENSION - 1;
+	}
+
+	std::pair<int,int> initialPosition = std::make_pair(rookInitRow, rookInitCol);
+	std::pair<int,int> destinationPosition = std::make_pair(rookDestRow, rookDestCol);
+	ChessMove move(initialPosition, destinationPosition, this->color);
+
+	std::cout << "rook init col: " << initialPosition.second << std::endl;
+	std::cout << "rook dest col: " << initialPosition.second << std::endl;
+
+	chessboard.castleRook(move);
 }
 
 bool King::moveVectorPermitted(std::pair<int,int> positionChange){
@@ -42,15 +73,15 @@ bool King::castlingPossible(ChessBoard& chessboard, int moveRow, int moveCol){
 
 bool King::castlingCoordinatesPermitted(ChessBoard& chessboard, int moveRow, int moveCol){
 	Color lowerColor = chessboard.getLowerColor();
-
 	bool locationValid = true;
-	locationValid &= (moveCol == 2) || (moveCol == 6);
 
 	if(lowerColor == this->color){
-		locationValid &= (moveRow == 0);	
+		locationValid &= (moveRow == BOARD_DIMENSION - 1);	
+		locationValid &= (moveCol == 1) || (moveCol == 6);
 	}
 	else{
-		locationValid &= (moveRow == BOARD_DIMENSION - 1);
+		locationValid &= (moveRow == 0);
+		locationValid &= (moveCol == 1) || (moveCol == BOARD_DIMENSION - 2);
 	}
 
 	return locationValid;

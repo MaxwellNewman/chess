@@ -19,6 +19,7 @@ public:
 	void setColor(Color color);
 	void setPiece(ChessPiece* piece);
 	ChessPiece* replacePiece(ChessPiece* replacement);
+	bool removePiece();
 
 	ChessPiece* piece;
 

@@ -46,5 +46,9 @@ ChessPiece* ChessSquare::replacePiece(ChessPiece* replacement){
 	this->piece = replacement;
 	this->occupied = (bool)replacement;
 
+	if(replacement){
+		replacement->setLocation(this->row, this->col);
+	}
+
 	return previousPiece;
 }

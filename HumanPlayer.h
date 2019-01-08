@@ -10,7 +10,7 @@
 
 class HumanPlayer : public ChessPlayer{
 public:
-	HumanPlayer();
+	HumanPlayer(Color playerColor);
 	ChessMove selectMove();
 
 private:
@@ -20,7 +20,7 @@ private:
 	void removeExtraCharacters(std::string& positionString);
 	void removeCharFromString(std::string& str, char toRemove);
 
-	std::pair<int,int> extractPosition(std::string positionString);
+	std::pair<int,int> extractPosition(std::string& positionString);
 	bool isValidPosition(std::string& initialPosition);
 };
 

@@ -3,7 +3,7 @@
 
 const char HumanPlayer::charsToRemove[] = ",:-.; ";
 
-HumanPlayer::HumanPlayer(){
+HumanPlayer::HumanPlayer(Color playerColor) : ChessPlayer(playerColor){
 
 }
 
@@ -14,7 +14,7 @@ ChessMove HumanPlayer::selectMove(){
 	std::pair<int,int> initialPosition = getCoordinates(initialPositionMessage);
 	std::pair<int,int> destinationPosition = getCoordinates(destinationPositionMessage);
 
-	return ChessMove(initialPosition, destinationPosition);
+	return ChessMove(initialPosition, destinationPosition, this->playerColor);
 }
 
 std::pair<int,int> HumanPlayer::getCoordinates(std::string& messagePrompt){
@@ -55,19 +55,19 @@ void HumanPlayer::removeCharFromString(std::string& str, char toRemove){
 bool HumanPlayer::isValidPosition(std::string& initialPosition){
 	if(initialPosition.size() > 2) return false;
 
+	bool secondIndexIsNumber = (initialPosition[1] <= '8' && initialPosition[1] >= '1');
+
 	bool firstIndexIsLetter = (initialPosition[0] <= 'H' && initialPosition[0] >= 'A');
 	firstIndexIsLetter |= (initialPosition[0] <= 'h' || initialPosition[0] >= 'a');
-
-	bool secondIndexIsNumber = (initialPosition[1] <= '9' && initialPosition[1] >= '0');
 
 	return firstIndexIsLetter & secondIndexIsNumber;
 }
 
-std::pair<int,int> HumanPlayer::extractPosition(std::string positionString){
-	positionString[0] = std::tolower(positionString[0]);
+std::pair<int,int> HumanPlayer::extractPosition(std::string& positionString){
+	positionString[1] = std::tolower(positionString[1]);
 
-	int row = positionString[0] - 'a';
-	int col = positionString[1] - '0';
+	int col = positionString[0] - 'a';
+	int row = positionString[1] - '1';
 
 	return std::make_pair(row,col);
 }

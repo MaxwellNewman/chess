@@ -6,7 +6,7 @@ CPP_FLAGS = g++ -g -Wall -std=c++11
 
 all: main
 
-main: ChessBoard.o ChessSquare.o ChessMove.o ChessPiece.o Pawn.o Knight.o Bishop.o Rook.o Queen.o King.o main.cpp
+main:  main.cpp ChessBoard.o ChessSquare.o ChessMove.o ChessPiece.o Pawn.o Knight.o Bishop.o Rook.o Queen.o King.o ChessGame.o ChessPlayer.o HumanPlayer.o
 	$(CPP_FLAGS) main.cpp *.o -o main
 
 # ChessBoard.o: ChessBoard.cpp ChessBoard.h
@@ -18,4 +18,4 @@ main: ChessBoard.o ChessSquare.o ChessMove.o ChessPiece.o Pawn.o Knight.o Bishop
 .PHONY: clean
 
 clean: 
-	-rm *.o
+	rm *.o

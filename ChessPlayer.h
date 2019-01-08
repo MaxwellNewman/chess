@@ -10,7 +10,7 @@ public:
 	ChessPlayer(Color playerColor);
 	virtual ChessMove selectMove() = 0;
 
-private:
+protected:
 	Color playerColor;
 };
 

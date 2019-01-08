@@ -6,6 +6,7 @@ ChessPiece::ChessPiece(Color pieceColor, PieceType type){
 	this->color = pieceColor;
 	this->type = type;
 	this->hasMoved = false;
+	this->alive = true;
 	setSymbol();
 }
 
@@ -51,6 +52,8 @@ bool ChessPiece::noInterveningPieces(ChessBoard& chessboard, std::pair<int,int>&
 		currentCol += moveUnitVector.second;
 
 		if(chessboard.squareIsOccupied(currentRow, currentCol)){
+			std::cout << "i: " << i << std::endl;
+			std::cout << "currRow: " << currentRow << "	currCol: " << currentCol << std::endl;
 			if(chessboard.getPieceColor(currentRow, currentCol) == this->color) return false;
 			else if (i != moveMagnitude - 1) return false;
 		}

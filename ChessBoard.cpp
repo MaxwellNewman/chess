@@ -4,13 +4,10 @@ const std::vector<std::pair<int,int> > ChessBoard::directionVectors = {std::make
 	std::make_pair(1,0), std::make_pair(-1,0), std::make_pair(0,1), std::make_pair(0,-1)};
 
 ChessBoard::ChessBoard(Color lowerColor){
-	std::cout << "Entering constructor" << std::endl;
 	this->lowerColor = lowerColor;
 	createBoard();
 	initializeBoard();
 	colorBoard();
-
-	std::cout << "leaving construtor" << std::endl;
 }
 
 void ChessBoard::createBoard(){
@@ -31,7 +28,23 @@ void ChessBoard::initializeBoard(){
 		for(int j=0; j<BOARD_DIMENSION; ++j){
 			ChessPiece* piece = placePiece(i,j);
 			board[i][j].setPiece(piece);
+			storePiecePointer(piece);
 		}
+	}
+}
+
+void ChessBoard::storePiecePointer(ChessPiece* piece){
+	if(!piece) return;
+
+	pieces.push_back(piece);
+
+	if(piece->getType() == KING){
+		if(piece->getColor() == BLACK) blackKing = piece;
+		else whiteKing = piece;
+	}
+	else if(piece->getType() == KNIGHT){
+		if(piece->getColor() == BLACK) blackKnights.push_back(piece);
+		else whiteKnights.push_back(piece);
 	}
 }
 
@@ -77,7 +90,7 @@ Color ChessBoard::determinePieceColor(int row, int col){
 	Color pieceColor;
 	(row == 0 || row == 1) ? pieceColor = reverseColor(lowerColor) : pieceColor = lowerColor;
 
-	return lowerColor;
+	return pieceColor;
 }
 
 PieceType ChessBoard::determinePieceType(int row, int col){
@@ -102,13 +115,11 @@ PieceType ChessBoard::determinePieceType(int row, int col){
 }
 
 void ChessBoard::printBoard(){
-	std::cout << "in fun" << std::endl;
-
 	for(int i=0; i<BOARD_DIMENSION; ++i){
 		printRow(i);
 	}
 
-	std::cout << "end of func " << std::endl;
+	std::cout << std::endl << algebraicColumns() << std::endl;
 }
 
 void ChessBoard::printRow(int row){
@@ -118,8 +129,33 @@ void ChessBoard::printRow(int row){
 			outputRow += board[row][j].getOutputLine(i);
 		}
 
+		if(i == CELL_HEIGHT/2) {
+			outputRow += "	" + currentAlgebraicRow(row);
+		}
+
 		std::cout << outputRow << std::endl;
 	}
+}
+
+std::string ChessBoard::algebraicColumns(){
+	std::string algebraicColumns = "";
+	for(int i=0; i<BOARD_DIMENSION; ++i){
+		for(int j=0; j<CELL_LENGTH; ++j){
+			if(j == CELL_LENGTH/2) algebraicColumns += currentAlgebraicColumn(i);
+			else algebraicColumns += ' ';
+		}
+	}
+	return algebraicColumns;
+}
+
+char ChessBoard::currentAlgebraicColumn(int col){
+	if(this->lowerColor == BLACK) return char('H' - col);
+	else return char('A' + col);
+}
+
+std::string ChessBoard::currentAlgebraicRow(int row){
+	if(this->lowerColor == BLACK) return std::to_string(row+1);
+	else return std::to_string(8-row);
 }
 
 Color ChessBoard::reverseColor(Color currentColor){
@@ -176,19 +212,25 @@ bool ChessBoard::pieceCanAttack(std::pair<int,int>& attackerPos, std::pair<int,i
 }
 
 bool ChessBoard::knightsCanAttack(std::pair<int,int>& defenderPos, Color defenderColor){
-	std::vector<ChessPiece*>& knightsVec = blackKnights;
 
-	if(defenderColor == BLACK) knightsVec = whiteKnights;
+	bool knightsCanAttack = false;
 
-	for(unsigned int i=0; i<knightsVec.size(); ++i){
-		if(!knightsVec[i]->isAlive()) return false;
+	std::vector<ChessPiece*>* knightsVec = &blackKnights;
+	if(defenderColor == BLACK) knightsVec = &whiteKnights;
 
-		std::pair<int,int> attackerPos = knightsVec[i]->getLocation();
+	for(unsigned int i=0; i<knightsVec->size(); ++i){
 
-		return pieceCanAttack(attackerPos, defenderPos);
+		ChessPiece* knight = (*knightsVec)[i];
+
+		if(!knight->isAlive()) return false;
+
+		std::pair<int,int> attackerPos = knight->getLocation();
+
+		knightsCanAttack = pieceCanAttack(attackerPos, defenderPos);
+		if(knightsCanAttack) return true;
 	}
 
-	return false;
+	return knightsCanAttack;
 }
 
 bool ChessBoard::checkForCheckmate(ChessPiece* kingToCheck){
@@ -204,6 +246,7 @@ bool ChessBoard::takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& 
 	if(pieceCanAttack(attackerPos, defenderPos)){
 		ChessPiece* attacker = board[attackerPos.first][attackerPos.second].piece;
 		board[defenderPos.first][defenderPos.second].replacePiece(attacker);
+		board[attackerPos.first][attackerPos.second].replacePiece(NULL);
 		return true;
 	}else{
 		return false;
@@ -211,5 +254,21 @@ bool ChessBoard::takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& 
 }
 
 bool ChessBoard::makeMove(ChessMove& move){
-	return takePiece(move.attackerPos, move.defenderPos);
+	ChessPiece* movingPiece = board[move.attackerPos.first][move.attackerPos.second].piece;
+	if(!movingPiece) return false;
+	if(movingPiece->getColor() != move.movingPlayer) return false;
+
+	bool attackingPieceSucceeded = takePiece(move.attackerPos, move.defenderPos);
+
+	std::cout << "in danger: " << movingPiece->isInDanger(*this) << std::endl;
+
+	return attackingPieceSucceeded;
+}
+
+bool ChessBoard::castleRook(ChessMove& move){
+	ChessPiece* rook = board[move.attackerPos.first][move.attackerPos.second].piece;
+
+	board[move.defenderPos.first][move.defenderPos.second].replacePiece(rook);
+	board[move.attackerPos.first][move.attackerPos.second].replacePiece(NULL);
+	return true;
 }

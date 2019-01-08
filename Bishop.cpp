@@ -9,7 +9,11 @@ Bishop::Bishop(Color pieceColor) : ChessPiece(pieceColor, BISHOP){
 }
 
 bool Bishop::validateMove(ChessBoard& chessboard, int moveRow, int moveCol){
-	std::pair<int,int> positionChange = std::make_pair(this->row - moveRow, this->col - moveCol);
+	std::pair<int,int> positionChange = std::make_pair(moveRow - this->row, moveCol - this->col);
+
+	std::cout << "moveVectorPermitted: " << moveVectorPermitted(positionChange) << std::endl;
+	std::cout << "moverow: " << moveRow << "	moveCol: " << moveCol << std::endl;
+
 	if(!moveVectorPermitted(positionChange)) return false;
 
 	std::pair<int,int> moveVector = moveUnitVector(positionChange);
