@@ -60,7 +60,7 @@ private:
 	void colorBoard();
 	void printRow(int row);
 	bool checkForCheckmate(ChessPiece* kingToCheck);
-	bool takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos);
+	ChessPiece* takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos);
 	std::string currentAlgebraicRow(int row);
 	char currentAlgebraicColumn(int col);
 	std::string algebraicColumns();

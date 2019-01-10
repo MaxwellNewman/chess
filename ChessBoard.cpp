@@ -234,22 +234,41 @@ bool ChessBoard::knightsCanAttack(std::pair<int,int>& defenderPos, Color defende
 }
 
 bool ChessBoard::checkForCheckmate(ChessPiece* kingToCheck){
+	std::pair<int,int> kingPos = kingToCheck->getLocation();
 
-	return false;
+	for(int i=0; i<directionVectors.size(); ++i){
+		int defenderRow = kingPos.first + directionVectors[i].first;
+		int defenderCol = kingPos.second + directionVectors[i].second;
+
+		std::pair<int,int> defenderPos = std::make_pair(defenderRow, defenderCol);
+		ChessPiece* defender = takePiece(kingPos, defenderPos);
+
+		if(defender == NULL) continue;
+
+		bool kingSafe = false;
+		kingSafe |= !kingToCheck->isInDanger(*this);
+
+		board[defenderRow][defenderCol].replacePiece(defender);
+		board[kingPos.first][kingPos.second].replacePiece(kingToCheck);
+
+		if(kingSafe) return false;
+	}
+
+	return true;
 }
 
 std::vector<std::pair<int,int> > ChessBoard::getDirectionVectors(){
 	return this->directionVectors;
 }
 
-bool ChessBoard::takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos){
+ChessPiece* ChessBoard::takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos){
 	if(pieceCanAttack(attackerPos, defenderPos)){
 		ChessPiece* attacker = board[attackerPos.first][attackerPos.second].piece;
-		board[defenderPos.first][defenderPos.second].replacePiece(attacker);
+		ChessPiece* defender = board[defenderPos.first][defenderPos.second].replacePiece(attacker);
 		board[attackerPos.first][attackerPos.second].replacePiece(NULL);
-		return true;
+		return defender;
 	}else{
-		return false;
+		return NULL;
 	}
 }
 
