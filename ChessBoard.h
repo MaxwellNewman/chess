@@ -20,7 +20,7 @@ class ChessSquare;
 
 class ChessBoard{
 public:
-	ChessBoard(Color playerColor);
+	ChessBoard(Color playerColor, bool useUnicode);
 	void printBoard();
 	Color getPieceColor(int row, int col);
 	bool squareIsOccupied(int row, int col);
@@ -34,6 +34,7 @@ public:
 	bool knightsCanAttack(std::pair<int,int>& defenderPos, Color defenderColor);
 	bool coordinatesOffBoard(int row, int col);
 	bool castleRook(ChessMove& move);
+	bool deletePiece(std::pair<int,int>& position);
 
 private:
 	std::vector<std::vector<ChessSquare> > board;
@@ -57,7 +58,7 @@ private:
 	Color determinePieceColor(int row, int col);
 	void initializeBoard();
 	void createBoard();
-	void colorBoard();
+	void colorBoard(bool useUnicode);
 	void printRow(int row);
 	bool checkForCheckmate(ChessPiece* kingToCheck);
 	ChessPiece* takePiece(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos);
@@ -65,6 +66,7 @@ private:
 	char currentAlgebraicColumn(int col);
 	std::string algebraicColumns();
 	void storePiecePointer(ChessPiece* piece);
+	void updateLastMoved(ChessPiece* lastMoved);
 };
 
 #endif

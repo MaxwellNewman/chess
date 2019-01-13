@@ -2,7 +2,7 @@
 #include "ChessGame.h"
 
 ChessGame::ChessGame(Color lowerColor){
-	chessboard = new ChessBoard(lowerColor);
+	chessboard = new ChessBoard(lowerColor, true);
 	whitePlayer = new HumanPlayer(WHITE);
 	blackPlayer = new HumanPlayer(BLACK);
 
@@ -27,6 +27,7 @@ ChessMove ChessGame::getPlayerMove(){
 }
 
 void ChessGame::swapPlayer(){
+	std::cout << "swapping" << std::endl;
 	if(currPlayer == blackPlayer) currPlayer = whitePlayer;
 	else currPlayer = blackPlayer;
 }

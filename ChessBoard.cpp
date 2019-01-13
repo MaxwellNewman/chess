@@ -10,8 +10,6 @@ ChessBoard::ChessBoard(Color lowerColor, bool useUnicode){
 	colorBoard(useUnicode);
 }
 
-
-
 void ChessBoard::createBoard(){
 	for(int i=0; i<BOARD_DIMENSION; ++i){
 		std::vector<ChessSquare> boardRow;
@@ -210,7 +208,8 @@ bool ChessBoard::pieceHasMoved(int row, int col){
 bool ChessBoard::pieceCanAttack(std::pair<int,int>& attackerPos, std::pair<int,int>& defenderPos){
 	ChessPiece* attacker = board[attackerPos.first][attackerPos.second].piece;
 
-	return attacker->validateMove(*this, defenderPos.first, defenderPos.second);
+	bool attackerSucceeded = attacker->validateMove(*this, defenderPos.first, defenderPos.second);
+	return attackerSucceeded;
 }
 
 bool ChessBoard::knightsCanAttack(std::pair<int,int>& defenderPos, Color defenderColor){
@@ -245,7 +244,7 @@ bool ChessBoard::checkForCheckmate(ChessPiece* kingToCheck){
 		std::pair<int,int> defenderPos = std::make_pair(defenderRow, defenderCol);
 		ChessPiece* defender = takePiece(kingPos, defenderPos);
 
-		if(defender == NULL) continue;
+		if(defender == NULL || defender == (ChessPiece*)0x01) continue;
 
 		bool kingSafe = false;
 		kingSafe |= !kingToCheck->isInDanger(*this);
@@ -268,7 +267,8 @@ ChessPiece* ChessBoard::takePiece(std::pair<int,int>& attackerPos, std::pair<int
 		ChessPiece* attacker = board[attackerPos.first][attackerPos.second].piece;
 		ChessPiece* defender = board[defenderPos.first][defenderPos.second].replacePiece(attacker);
 		board[attackerPos.first][attackerPos.second].replacePiece(NULL);
-		return defender;
+		if(defender) return defender;
+		else return (ChessPiece*)0x01;
 	}else{
 		return NULL;
 	}
@@ -283,6 +283,8 @@ bool ChessBoard::makeMove(ChessMove& move){
 
 	std::cout << "in danger: " << movingPiece->isInDanger(*this) << std::endl;
 
+	if(attackingPieceSucceeded) updateLastMoved(movingPiece);
+
 	return attackingPieceSucceeded;
 }
 
@@ -291,5 +293,15 @@ bool ChessBoard::castleRook(ChessMove& move){
 
 	board[move.defenderPos.first][move.defenderPos.second].replacePiece(rook);
 	board[move.attackerPos.first][move.attackerPos.second].replacePiece(NULL);
+	return true;
+}
+
+void ChessBoard::updateLastMoved(ChessPiece* lastMoved){
+	this->lastMovedPiece = lastMoved;
+}
+
+bool ChessBoard::deletePiece(std::pair<int,int>& position){
+	board[position.first][position.second].replacePiece(NULL);
+
 	return true;
 }

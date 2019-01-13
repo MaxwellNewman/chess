@@ -25,6 +25,10 @@ public:
 
 protected:
 	const std::string name;
+	static const std::string WHITE_SQUARE_UNI;
+	static const std::string BLACK_SQUARE_UNI;
+
+
 	int row;
 	int col;
 	bool occupied;

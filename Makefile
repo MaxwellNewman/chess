@@ -18,4 +18,4 @@ main:  main.cpp ChessBoard.o ChessSquare.o ChessMove.o ChessPiece.o Pawn.o Knigh
 .PHONY: clean
 
 clean: 
-	rm *.o
+	rm -f *.o

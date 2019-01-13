@@ -1,10 +1,7 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-#include <iostream>
-
-std::string WHITE_SQUARE_UNI = "█";
-std::string BLACK_SQUARE_UNI = " ";
+#include <string>
 
 enum Color{
 	WHITE,

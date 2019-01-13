@@ -1,5 +1,8 @@
 #include "ChessSquare.h"
 
+const std::string ChessSquare::WHITE_SQUARE_UNI = "█";
+const std::string ChessSquare::BLACK_SQUARE_UNI = " ";
+
 ChessSquare::ChessSquare(int row, int col){
 	this->row = row;
 	this->col = col;
@@ -18,7 +21,12 @@ std::string ChessSquare::getOutputLine(int row){
 	std::string outputLine = "";
 
 	for(int i=0; i<CELL_LENGTH; ++i){
-		if(row == CELL_HEIGHT / 2 && i == CELL_LENGTH / 2) outputLine += getPieceSymbol();
+		if(row == CELL_HEIGHT / 2 && i == CELL_LENGTH / 2){
+			std::string symbol = getPieceSymbol();
+
+			if(symbol != BLACK_SQUARE_UNI && symbol != WHITE_SQUARE_UNI) outputLine += char(std::stoi(symbol));
+			else outputLine += symbol;
+		}
 		else outputLine += outputColor;
 	}
 
@@ -45,7 +53,7 @@ void ChessSquare::setPiece(ChessPiece* piece){
 
 std::string ChessSquare::getPieceSymbol(){
 	if(piece == NULL) return outputColor;
-	return std::to_string(piece->getSymbol());
+	return std::to_string(char(piece->getSymbol()));
 }
 
 ChessPiece* ChessSquare::replacePiece(ChessPiece* replacement){

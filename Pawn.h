@@ -16,9 +16,13 @@ public:
 private:
 	static const std::vector<std::pair<int,int> > upperMoveVectors;
 	static const std::vector<std::pair<int,int> > lowerMoveVectors;
+	bool attackedEnPassant;
+
+
 	bool moveVectorPermitted(ChessBoard& chessboard, std::pair<int,int> positionChange);
 	bool enPassantPossible(ChessBoard& chessboard, int moveRow, int moveCol);
 	bool noInterveningPieces(ChessBoard& chessboard, std::pair<int,int> positionChange, int moveRow, int moveCol);
+	void removePassantPiece(ChessBoard& chessboard, int moveRow, int moveCol);
 };
 
 #endif

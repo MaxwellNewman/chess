@@ -5,10 +5,12 @@ const std::vector<std::pair<int,int> > Pawn::upperMoveVectors = {std::make_pair(
 
 Pawn::Pawn(){
 	// do nothing
+	this->attackedEnPassant = false;
 }
 
 Pawn::Pawn(Color pieceColor) : ChessPiece(pieceColor, PAWN){
 	//do nothing
+	this->attackedEnPassant = false;
 }
 
 bool Pawn::validateMove(ChessBoard& chessboard, int moveRow, int moveCol){
@@ -21,6 +23,11 @@ bool Pawn::validateMove(ChessBoard& chessboard, int moveRow, int moveCol){
 
 	if(!moveVectorPermitted(chessboard, positionChange)) return false;
 	if(!noInterveningPieces(chessboard, positionChange, moveRow, moveCol)) return false;
+
+	if(this->attackedEnPassant){
+		this->attackedEnPassant = false;
+		removePassantPiece(chessboard, moveRow, moveCol);
+	}
 
 	return true;
 }
@@ -36,6 +43,7 @@ bool Pawn::moveVectorPermitted(ChessBoard& chessboard, std::pair<int,int> positi
 
 	for(int i=0; i<moveVectors->size(); ++i){
 		std::cout << "vector row: " << (*moveVectors)[i].first << std::endl;
+		std::cout << "vectors equal: " << (positionChange == (*moveVectors)[i]) << std::endl;
 		if(positionChange == (*moveVectors)[i]) return true;
 	}
 
@@ -44,7 +52,10 @@ bool Pawn::moveVectorPermitted(ChessBoard& chessboard, std::pair<int,int> positi
 
 bool Pawn::noInterveningPieces(ChessBoard& chessboard, std::pair<int,int> positionChange, int moveRow, int moveCol){
 	if(abs(positionChange.second) == 1){
-		if(enPassantPossible(chessboard, moveRow, moveCol)) return true;
+		if(enPassantPossible(chessboard, moveRow, moveCol)){
+			this->attackedEnPassant = true;
+			return true;
+		}
 		else if(!chessboard.squareIsOccupied(moveRow, moveCol)) return false;
 		else if(chessboard.getPieceColor(moveRow, moveCol) == this->color) return false;
 	}
@@ -65,4 +76,9 @@ bool Pawn::enPassantPossible(ChessBoard& chessboard, int moveRow, int moveCol){
 	if(chessboard.getPieceType(this->row, moveCol) != PAWN) return false;
 	if(!chessboard.lastMoved(this->row, moveCol)) return false;
 	return chessboard.getPieceColor(this->row, moveCol) != this->color;
+}
+
+void Pawn::removePassantPiece(ChessBoard& chessboard, int row, int col){
+	std::pair<int,int> pawnLocation = std::make_pair(this->row, col);
+	chessboard.deletePiece(pawnLocation);
 }
