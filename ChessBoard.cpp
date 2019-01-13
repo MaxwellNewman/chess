@@ -10,6 +10,8 @@ ChessBoard::ChessBoard(Color lowerColor, bool useUnicode){
 	colorBoard(useUnicode);
 }
 
+
+
 void ChessBoard::createBoard(){
 	for(int i=0; i<BOARD_DIMENSION; ++i){
 		std::vector<ChessSquare> boardRow;
