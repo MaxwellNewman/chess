@@ -16,7 +16,7 @@ public:
 	bool isOccupied();
 	std::string getName();
 	std::string getOutputLine(int row);
-	void setColor(Color color);
+	void setColor(Color color, bool useUnicode);
 	void setPiece(ChessPiece* piece);
 	ChessPiece* replacePiece(ChessPiece* replacement);
 	bool removePiece();
@@ -29,9 +29,9 @@ protected:
 	int col;
 	bool occupied;
 	Color colorName;
-	Color outputColor;
+	std::string outputColor;
 
-	char getPieceSymbol();
+	std::string getPieceSymbol();
 };
 
 #endif

@@ -3,11 +3,11 @@
 const std::vector<std::pair<int,int> > ChessBoard::directionVectors = {std::make_pair(1,1), std::make_pair(-1,1), std::make_pair(1,-1), std::make_pair(-1,-1),
 	std::make_pair(1,0), std::make_pair(-1,0), std::make_pair(0,1), std::make_pair(0,-1)};
 
-ChessBoard::ChessBoard(Color lowerColor){
+ChessBoard::ChessBoard(Color lowerColor, bool useUnicode){
 	this->lowerColor = lowerColor;
 	createBoard();
 	initializeBoard();
-	colorBoard();
+	colorBoard(useUnicode);
 }
 
 void ChessBoard::createBoard(){
@@ -48,14 +48,14 @@ void ChessBoard::storePiecePointer(ChessPiece* piece){
 	}
 }
 
-void ChessBoard::colorBoard(){
+void ChessBoard::colorBoard(bool useUnicode){
 	Color currentColor = WHITE;
 
 	for(int i=0; i<BOARD_DIMENSION; ++i){
 		currentColor = reverseColor(currentColor);
 		for(int j=0; j<BOARD_DIMENSION; ++j){
 			currentColor = reverseColor(currentColor);
-			board[i][j].setColor(currentColor);
+			board[i][j].setColor(currentColor, useUnicode);
 		}
 	}
 }
@@ -161,8 +161,8 @@ std::string ChessBoard::currentAlgebraicRow(int row){
 Color ChessBoard::reverseColor(Color currentColor){
 	if(currentColor == WHITE) return BLACK;
 	else if(currentColor == BLACK) return WHITE;
-	else if(currentColor == WHITE_SQUARE) return BLACK_SQUARE;
-	else return WHITE_SQUARE;
+	else if(currentColor == WHITE_SQUARE_CHAR) return BLACK_SQUARE_CHAR;
+	else return WHITE_SQUARE_CHAR;
 }
 
 Color ChessBoard::getPieceColor(int row, int col){

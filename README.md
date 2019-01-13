@@ -1,6 +1,7 @@
 "# chess" 
 
 This is a program designed to run in Windows.  The chessboard will not output properly on Unix-based or Mac OSX systems.
+To properly display the unicode chess pieces, use the NSimSun font on Windows.
 
 To Do: 
 1. implement algebraic notation for chess

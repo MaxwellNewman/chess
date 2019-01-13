@@ -1,4 +1,3 @@
-
 #include "ChessSquare.h"
 
 ChessSquare::ChessSquare(int row, int col){
@@ -20,24 +19,33 @@ std::string ChessSquare::getOutputLine(int row){
 
 	for(int i=0; i<CELL_LENGTH; ++i){
 		if(row == CELL_HEIGHT / 2 && i == CELL_LENGTH / 2) outputLine += getPieceSymbol();
-		else outputLine += char(outputColor);
+		else outputLine += outputColor;
 	}
 
 	return outputLine;
 }
 
-void ChessSquare::setColor(Color color){
+void ChessSquare::setColor(Color color, bool useUnicode){
 	this->colorName = color;
-	color == WHITE ? this->outputColor = WHITE_SQUARE : this->outputColor = BLACK_SQUARE;
+
+	if(color == WHITE){
+		if(useUnicode) outputColor = WHITE_SQUARE_UNI;
+		else outputColor = WHITE_SQUARE_CHAR;
+	}
+	else{
+		if(useUnicode) outputColor = BLACK_SQUARE_UNI;
+		else outputColor = BLACK_SQUARE_CHAR;
+	}
+	//color == WHITE ? this->outputColor = WHITE_SQUARE_CHAR : this->outputColor = BLACK_SQUARE_CHAR;
 }
 
 void ChessSquare::setPiece(ChessPiece* piece){
 	this->piece = piece;
 }
 
-char ChessSquare::getPieceSymbol(){
-	if(piece == NULL) return char(outputColor);
-	return piece->getSymbol();
+std::string ChessSquare::getPieceSymbol(){
+	if(piece == NULL) return outputColor;
+	return std::to_string(piece->getSymbol());
 }
 
 ChessPiece* ChessSquare::replacePiece(ChessPiece* replacement){
