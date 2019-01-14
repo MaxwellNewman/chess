@@ -11,3 +11,11 @@ To Do:
 2. finish implementing a checker for checkmates
 
 3. implement a system that colors the pieces. This can be accomplished using windows commands.
+
+3. finish implementing a checker for stalemates
+
+4. implement the rule stating that a king cannot castle through a check (should be a simple fix, involving checking if a king would be in danger at any point between himself and the destined position when castling)
+
+5. implement the rule that a pawn can transform into another piece when reaching the back row (might just automatically turn it into a queen for now, instead of given the player an option)
+
+6. implement the rule stating that a repeated move three times results in a stalemate
